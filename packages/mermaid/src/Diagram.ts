@@ -4,7 +4,7 @@ import { detectType, getDiagramLoader } from './diagram-api/detectType.js';
 import { UnknownDiagramError } from './errors.js';
 import { encodeEntities } from './utils.js';
 import type { DetailedError } from './utils.js';
-import type { DiagramDefinition, DiagramMetadata } from './diagram-api/types.js';
+import type { DiagramDB, DiagramDefinition, DiagramMetadata } from './diagram-api/types.js';
 
 // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 export type ParseErrorFunction = (err: string | DetailedError | unknown, hash?: any) => void;
@@ -13,7 +13,9 @@ export type ParseErrorFunction = (err: string | DetailedError | unknown, hash?: 
  * An object representing a parsed mermaid diagram definition.
  * @privateRemarks This is exported as part of the public mermaidAPI.
  */
-export class Diagram {
+export class Diagram<
+  D extends DiagramDB = DiagramDB
+> {
   public static async fromText(text: string, metadata: Pick<DiagramMetadata, 'title'> = {}) {
     const config = configApi.getConfig();
     const type = detectType(text, config);
@@ -48,7 +50,7 @@ export class Diagram {
   private constructor(
     public type: string,
     public text: string,
-    public db: DiagramDefinition['db'],
+    public db: DiagramDefinition<D>['db'],
     public parser: DiagramDefinition['parser'],
     public renderer: DiagramDefinition['renderer']
   ) {}

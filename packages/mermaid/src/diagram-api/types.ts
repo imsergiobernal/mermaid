@@ -73,8 +73,8 @@ export interface DiagramRenderer {
   ) => Map<string, DiagramStyleClassDef>;
 }
 
-export interface DiagramDefinition {
-  db: DiagramDB;
+export interface DiagramDefinition<D extends DiagramDB = DiagramDB> {
+  db: D;
   renderer: DiagramRenderer;
   parser: ParserDefinition;
   styles?: any;
